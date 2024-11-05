@@ -22,12 +22,17 @@ export default LicenseVerfier = props => {
   const [progressStep, setProgressStep] = useState(0);
 
   const docPickerClicked = async () => {
-    try {
-      const data = await pick({});
+    
+
+  try {
+    const data = await pick({});
+    if (data && data[0]) {
       fileUploadAPI(data[0]);
-    } catch (err) {
-      // see error handling section
     }
+    console.log("Data picked");
+  } catch (err) {
+    console.error("File pick error:", err);
+  }
   };
 
   function fileUploadAPI(res) {

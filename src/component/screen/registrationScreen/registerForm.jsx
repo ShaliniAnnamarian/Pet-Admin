@@ -53,6 +53,26 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
     close: '06:00 PM',
   };
   
+const availablePets =[
+  {
+    id:1,
+    pet:'cat'
+  },
+  {
+    id:2,
+    pet : 'dog'
+  }
+];
+
+const serviceOffer = [
+  {
+    service:'services 1'
+  },
+  {
+    service:'services 2'
+  },
+]
+
   const documentData = [
     { label: 'Pet shop Licence', uuid: "", file_name: '' },
     { label: 'Trade Licence', uuid: "", file_name: '' },
@@ -72,8 +92,8 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
     const { inpMain, inpText, inp } = styles;
     const [currentForm, setCurrentForm] = useState(1);
     const [docData, setDocData] = useState(documentData);
-    const [petListData, setPetListData] = useState([]);
-    const [productListData, setProductListData] = useState([]);
+    const [petListData, setPetListData] = useState(availablePets);
+    const [productListData, setProductListData] = useState(serviceOffer);
     const [availablePetsArr, setAvailablePetsArr] = useState([]);
     const [availableProductsArr, setAvailableProductsArr] = useState([]);
     const [openTimeModal, setOpenTimeModal] = useState(false);
@@ -565,7 +585,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                   control={control}
                   errMesg="This field is required"
                   defaultValue={editData?.owner_name ? editData?.owner_name : ''}
-                  rules={{ required: false }}
+                  rules={{ required: true }}
                 />
                 <Text style={[styles.seperatorText]}>Address</Text>
   
@@ -576,7 +596,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                   control={control}
                   errMesg="This field is required"
                   defaultValue={editData?.street ? editData?.street : ''}
-                  rules={{ required: false }}
+                  rules={{ required: true }}
                 />
                 <InpCtrl
                   label="Town"
@@ -585,7 +605,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                   control={control}
                   errMesg="This field is required"
                   defaultValue={editData?.town ? editData?.town : ''}
-                  rules={{ required: false }}
+                  rules={{ required: true }}
                 />
   
                 <View style={styles.singleRowInps}>
@@ -597,7 +617,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                       control={control}
                       errMesg="This field is required"
                       defaultValue={editData?.city ? editData?.city : ''}
-                      rules={{ required: false }}
+                      rules={{ required: true }}
                     />
                   </View>
                   <View style={{ flex: 1 }}>
@@ -607,7 +627,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                       controlName="pincode"
                       control={control}
                       errMesg="This field is required"
-                      rules={{ required: false, minLength: 6, maxLength: 6 }}
+                      rules={{ required: true, minLength: 6, maxLength: 6 }}
                       type="numeric"
                       defaultValue={editData?.pincode ? editData?.pincode : ''}
                     />
@@ -621,7 +641,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                   control={control}
                   errMesg="This field is required"
                   defaultValue={editData?.landmark ? editData?.landmark : ''}
-                  rules={{ required: false }}
+                  rules={{ required: true }}
                 />
                 <InpCtrl
                   label="Location in Google Map"
@@ -639,7 +659,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                   <Text style={[styles.seperatorText]}>GPS Coordinates</Text>
                   <TouchableOpacity
                     style={[styles.seperatorText]}
-                    onPress={() => setShowMaps(false)}>
+                    onPress={() => setShowMaps(true)}>
                     <Text
                       style={[
                         styles.addMoreBtn,
@@ -660,7 +680,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                       errMesg="This field is required"
                       type="numberic"
                       defaultValue={editData?.latitude ? editData?.latitude : ''}
-                      rules={{ required: false }}
+                      rules={{ required: true }}
                     />
                   </View>
                   <View style={[{ flex: 1 }]}>
@@ -675,7 +695,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                         editData?.longitude ? editData?.longitude : ''
                       }
                       cusValue={editData?.longitude ? editData?.longitude : ''}
-                      rules={{ required: false }}
+                      rules={{ required: true }}
                     />
                   </View>
                 </View>
@@ -690,7 +710,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                   errMesg="This field is required"
                   type="numeric"
                   defaultValue={editData?.mobile ? editData?.mobile : ''}
-                  rules={{ required: false }}
+                  rules={{ pattern: /^\d{10}$/, required: true }}
                 />
                 <InpCtrl
                   label="Landline Number"
@@ -704,7 +724,7 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                 <InpCtrl
                   label="Email"
                   placeholderText="Enter email"
-                  rules={{ pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, required: false }}
+                  rules={{ pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, required: true }}
                   controlName="email"
                   control={control}
                   errMesg="This field is required"
@@ -1024,7 +1044,6 @@ import LicenseVerifier from '../../comonComponent/licenseVerifier';
                   {docData.map((docItem, i) => {
                     return (
                       <React.Fragment key={i + docItem.label}>
-                        {/* <Text>{docItem.label}</Text> */}
                         <LicenseVerifier docItem={docItem} removeItem={() => removeDocument(i)} />
                       </React.Fragment>
                     );

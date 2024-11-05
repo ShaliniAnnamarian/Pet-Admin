@@ -28,8 +28,6 @@ export default function Layout() {
                         <Stack.Screen name="registerLayout" component={RegisterLayout} options={{ headerShown: false, unmountOnBlur: true }} />
 
                         <Stack.Screen name="registerForm" component={RegisterForm} options={{ headerShown: false, unmountOnBlur: true }} />
-
-                      
                     </Stack.Group>
                 </Stack.Navigator>
             </NavigationContainer>

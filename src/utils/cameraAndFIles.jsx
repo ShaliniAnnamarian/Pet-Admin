@@ -36,6 +36,7 @@ import { f15, flexCenter, primaryFontMedium } from '../styles/appStyles';
         outsideClick();
       } else {
         const permissionName = state == 'camera' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
+        
         return checkCameraPermission(state, permissionName)
       }
     }

@@ -203,7 +203,7 @@ export default MapContainer = React.memo(
               }}></Marker>
           )}
 
-          {searchedLocation && (
+          {/* {searchedLocation && (
             <Marker
               ref={marker => {
                 marker = marker;
@@ -213,9 +213,9 @@ export default MapContainer = React.memo(
                 latitude: searchedLocation.lat,
                 longitude: searchedLocation.lng,
               }}></Marker>
-          )}
+          )} */}
 
-          {toShowDraggableMarker && draggableCoords.lat && (
+          {/* {toShowDraggableMarker && draggableCoords.lat && (
             <Marker
               ref={marker => {
                 marker = marker;
@@ -229,7 +229,7 @@ export default MapContainer = React.memo(
               onDragEnd={e =>
                 setDraggableCoords(e.nativeEvent.coordinate)
               }></Marker>
-          )}
+          )} */}
         </MapView>
       </>
     );
