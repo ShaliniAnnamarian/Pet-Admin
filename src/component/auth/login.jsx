@@ -16,7 +16,6 @@ const Login = () => {
     const statusBarCurrent = useRef();
 
     const onSubmit =(data)=>{
-        console.log('data',data);
         navigation.navigate('storeList');
     }
 

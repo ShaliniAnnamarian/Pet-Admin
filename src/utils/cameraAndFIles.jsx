@@ -24,7 +24,6 @@ import { f15, flexCenter, primaryFontMedium } from '../styles/appStyles';
   
   export default function CameraAndFile(props) {
     const { toShow, outsideClick, permissionClick, dataResult } = props;
-  
     const [showMe, setShowMe] = useState(false);
   
     useMemo(() => {
@@ -36,7 +35,6 @@ import { f15, flexCenter, primaryFontMedium } from '../styles/appStyles';
         outsideClick();
       } else {
         const permissionName = state == 'camera' ? PERMISSIONS.ANDROID.CAMERA : PERMISSIONS.ANDROID.READ_MEDIA_IMAGES
-        
         return checkCameraPermission(state, permissionName)
       }
     }
@@ -80,18 +78,27 @@ import { f15, flexCenter, primaryFontMedium } from '../styles/appStyles';
   
   
     function accessCameraOrFile(type) {
+      console.log("accessCameraOrFile",type);
+      
       if (type == 'camera') {
+         console.log("camera11")
         ImagePicker.openCamera({
           width: 300,
           height: 300,
           cropping: true,
         }).then(image => {
+          console.log("image",image);
+          
           const { mime, path } = image
+         
           const name = path.substring(image.path.lastIndexOf('/') + 1);
           const res = [{
             fileName: name, type: mime, uri: path
           }]
+          console.log("res",res);
+          
           if (mime) {
+            console.log("res",res);
             dataResult(res)
           }
         });
@@ -107,6 +114,7 @@ import { f15, flexCenter, primaryFontMedium } from '../styles/appStyles';
             fileName: name, type: mime, uri: path
           }]
           if (mime) {
+            console.log("res",res);
             dataResult(res)
           }
         });

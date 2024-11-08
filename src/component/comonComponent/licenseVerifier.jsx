@@ -29,7 +29,6 @@ export default LicenseVerfier = props => {
     if (data && data[0]) {
       fileUploadAPI(data[0]);
     }
-    console.log("Data picked");
   } catch (err) {
     console.error("File pick error:", err);
   }

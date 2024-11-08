@@ -1,28 +1,27 @@
 import { useEffect, useRef, useState } from 'react';
 import { StyleSheet, Text, TouchableOpacity, View } from 'react-native';
 import Geolocation from 'react-native-geolocation-service';
-import { check, PERMISSIONS } from 'react-native-permissions';
+import { check, PERMISSIONS, request } from 'react-native-permissions';
 import { Image } from 'react-native-animatable';
 import { btnPrimary, f14, flexCenter } from '../../../styles/appStyles';
 import MapContainer from '../../comonComponent/mapContainer';
 import RemoveIconBg from '../../../assets/images/removeIconBg';
 
 export default function GetCoordsMapView(props) {
-  const { toShowMaps, toSendCoords, hideMaps } = props
+  const { toShowMaps, toSendCoords, hideMaps } = props;
   const mapRef = useRef();
-  const [locationPermission, setLocationPermission] = useState(false);
-
+  // const [locationPermission, setLocationPermission] = useState(false);
   const [showMarker, setShowMarker] = useState(false);
-  const [currentPosition, setCurrentPosition] = useState({});
+  const [currentPosition, setCurrentPosition] = useState({ latitude: null, longitude: null });
 
-
-  function permissionCheck(state) {
+  async function permissionCheck(state) {
     const checkPermission = async () => {
-      if (locationPermission) {
-        return true;
-      }
+      // if (locationPermission) {
+      //   return true;
+      // }
       const permissionStatus = await check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
       if (permissionStatus === 'granted') {
+        // setLocationPermission(true);
         return true;
       }
       if (permissionStatus === 'blocked') {
@@ -30,66 +29,54 @@ export default function GetCoordsMapView(props) {
         return false;
       }
       const requestStatus = await request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION);
+      // setLocationPermission(requestStatus === 'granted');
       return requestStatus === 'granted';
     };
-    if (checkPermission()) {
+    if (await checkPermission()) {
       currentLocation(state);
     }
-
-    // check(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(res => {
-    //   console.log();
-
-    //   if (res == 'granted') {
-    //     currentLocation(state);
-    //   }
-    //   else {
-    //     setTimeout(() => {
-    //       return request(PERMISSIONS.ANDROID.ACCESS_FINE_LOCATION).then(res => {
-    //         console.log("PERMISSIONS",res);
-
-    //         if (res == 'granted') {
-    //           currentLocation(state);
-    //         } else if (res == 'blocked') {
-    //           Linking.openSettings();
-    //         }
-    //       });
-    //     }, 0);
-    //   }
-    // });
   }
-
+  
   function currentLocation(state) {
+    
     Geolocation.getCurrentPosition(
-      position => {
+      (position) => {
+        console.log("position",position);
         const { latitude, longitude } = position.coords;
-        const defLatDelta = 50;
-        const resLatDel = 3 / defLatDelta;
-        animateToLocation(latitude, longitude, resLatDel, resLatDel);
-        setCurrentPosition({ lat: latitude, lng: longitude });
-      },
-
+        setCurrentPosition({ latitude, longitude });
+        updateInitialShops(latitude, longitude);
+        setShowMarker(true);},
       error => {
-        currentLocation(0);
+        console.error("Error fetching position:", error);
       },
-      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 },
+      { enableHighAccuracy: true, timeout: 15000, maximumAge: 10000 }
     );
   }
+  
 
   function animateToLocation(lat, long, longDel, latDel) {
-    console.log("test", lat, long, longDel, latDel);
-
     mapRef.current?.animateToRegion({
-      latitude: lat,
-      longitude: long,
-      latitudeDelta: longDel, //zoom level adjust 10 to 50
-      longitudeDelta: latDel, //zoom level adjust
+        latitude: lat,
+        longitude: long,
+        latitudeDelta: longDel, //zoom level adjust 10 to 50
+        longitudeDelta: latDel, //zoom level adjust
     });
-    setShowMarker(true);
-  }
+};
 
-  useEffect(() => {
-    permissionCheck('initial');
-  }, [])
+function updateInitialShops(lat, lng) {
+  console.log("latitude",lat,lng)
+  // const selectedRadius = { max: radius };
+  const defLatDelta = 50;
+  const resLatDel = 5 / defLatDelta;
+  // setSpreadRadiusCircle(selectedRadius.max);
+  animateToLocation(lat, lng, resLatDel, resLatDel);
+  // setSpreadRadiusCoords({ latitude: lat, longitude: lng });
+  // setActiveFiltRadius(null);
+}
+
+  // useEffect(() => {
+  //   permissionCheck('initial');
+  // }, []);
 
   return (
     toShowMaps &&
@@ -97,10 +84,8 @@ export default function GetCoordsMapView(props) {
       <View>
         <TouchableOpacity
           style={[styles.getMyLocation]}
-          onPress={() => {
-            permissionCheck('first_render');
-          }}
-          onLongPress={() => permissionCheck('initial')}>
+          onPress={() =>  permissionCheck('initial')}
+          onLongPress={() =>  permissionCheck('initial')}>
           <Image
             style={{ height: 70, width: 70 }}
             source={require('../../../assets/images/getMyLocation.png')}
@@ -112,7 +97,7 @@ export default function GetCoordsMapView(props) {
         toShowDraggableMarker={showMarker}
         draggableCoords={currentPosition}
         setDraggableCoords={e =>
-          setCurrentPosition({ lat: e.latitude, lng: e.longitude })
+          setCurrentPosition({ latitude: e.latitude, longitude: e.longitude })
         }
         styleCss={{
           height: '110%',
@@ -125,13 +110,12 @@ export default function GetCoordsMapView(props) {
 
       <View style={[styles.getCoords, { width: "95%", marginHorizontal: "auto" }]}>
         <View style={styles.coordsMain}>
-          <TouchableOpacity onPress={() => hideMaps()} style={[styles.closeBtn]}>
+          <TouchableOpacity onPress={hideMaps} style={[styles.closeBtn]}>
             <RemoveIconBg />
           </TouchableOpacity>
-          <TouchableOpacity onPress={() => { toSendCoords(currentPosition); hideMaps() }}>
+          <TouchableOpacity onPress={() => { toSendCoords(currentPosition); hideMaps(); }}>
             <Text style={[styles.btns]}>Get Values</Text>
           </TouchableOpacity>
-
         </View>
       </View>
     </>
@@ -170,5 +154,5 @@ const styles = StyleSheet.create({
     position: "absolute",
     right: 10,
     top: "25%"
-  }
+  },
 });

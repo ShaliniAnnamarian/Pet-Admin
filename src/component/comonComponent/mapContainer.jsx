@@ -55,7 +55,7 @@ export default MapContainer = React.memo(
     //   }
 
     // }, [CAROUSEL_REDUCER])
-
+    
     useMemo(() => {
       setMarkerUpdate(shops);
       setLoaderActive(true);
@@ -77,8 +77,8 @@ export default MapContainer = React.memo(
 
     // useEffect(() => {
     //   if (SINGLE_SHOP_REDUCER?.data?.data && isClicked) {
-    //     // dispatch(updateCurrentItem(SINGLE_SHOP_REDUCER?.data?.data));
-    //     // dispatch(updateBottomToggle(false))
+    //     dispatch(updateCurrentItem(SINGLE_SHOP_REDUCER?.data?.data));
+    //     dispatch(updateBottomToggle(false))
     //     markerClick(SINGLE_SHOP_REDUCER?.data?.data);
     //   }
     // }, [SINGLE_SHOP_REDUCER])
@@ -130,108 +130,96 @@ export default MapContainer = React.memo(
 
       [shops, carouselItem],
     );
+    console.log("myCurrentInfo",draggableCoords);
+    
     function mapLoadComplete() {
       setLoaderActive(false);
       setLoaderText('')
     }
-
     return (
       <>
-        {/* <LoaderCircle
-          size="large"
-          color="#FF2D2D"
-          visible={loaderActive}
-          textContent={loaderText}
-        /> */}
-        <MapView
-          ref={ref}
-          // style={styles.map}
-          style={[styles.map, { height: '110%', ...styleCss }]}
-          customMapStyle={mapStyle}
-          region={initialRegion}
-          key={`MAP_KEY_${googleMapsAPIKey}`}
-          showsUserLocation={toShowDraggableMarker ? false : true} //current location false - register form
-          showsMyLocationButton={false}
-          fillColor="rgba(255,255,255,1)"
-          showsCompass={false}
-          // compassStyle={{
-          //   bottom: 110,
-          //   left: 10,
-          // }}
-          onRegionChangeComplete={onRegionChangeComplete => {
-            mapLoadComplete();
-          }}>
-          <MarkerRenderMain data={markerUpdate} />
+      {/* <LoaderCircle
+        size="large"
+        color="#FF2D2D"
+        visible={loaderActive}
+        textContent={loaderText}
+      /> */}
+      <MapView
+        ref={ref}
+        // style={styles.map}
+        style={[styles.map, { height: '110%', ...styleCss }]}
+        customMapStyle={mapStyle}
+        region={initialRegion}
+        key={`MAP_KEY_${googleMapsAPIKey}`}
+        showsUserLocation={toShowDraggableMarker ? false : true} //current location false - register form
+        showsMyLocationButton={false}
+        fillColor="rgba(255,255,255,1)"
+        showsCompass={false}
+        // compassStyle={{
+        //   bottom: 110,
+        //   left: 10,
+        // }}
+        onRegionChangeComplete={onRegionChangeComplete => {
+          mapLoadComplete();
+        }}>
+        {/* <MarkerRenderMain data={markerUpdate} /> */}
+{/* 
+        {getDestinationShop?.showDirection == true && (
+          <MapViewDirections
+            optimizeWaypoints={true}
+            origin={{
+              latitude: myCurrentInfo.latitude,
+              longitude: myCurrentInfo.longitude,
+            }}
+            destination={{
+              latitude: getDestinationShop.coords.latitude,
+              longitude: getDestinationShop.coords.longitude,
+            }}
+            apikey={googleMapsAPIKey}
+            strokeWidth={3}
+            strokeColor="rgba(255, 45, 45, 1)"
+          />
+        )}
+        {spreadRadiusCoords?.longitude && (
+          <Circle
+            center={spreadRadiusCoords}
+            radius={1000 * spreadRadiusCircle}
+            strokeWidth={2}
+            strokeColor="#0000"
+            fillColor="rgba(0,0,0,0.15)"
+          />
+        )} */}
+        {/* {myCurrentInfo?.latitude && (
+          <Marker
+            coordinate={{
+              latitude: myCurrentInfo?.latitude,
+              longitude: myCurrentInfo?.longitude,
+            }}></Marker>
+        )} */}
 
-          {getDestinationShop?.showDirection == true && (
-            <MapViewDirections
-              optimizeWaypoints={true}
-              origin={{
-                latitude: myCurrentInfo.latitude,
-                longitude: myCurrentInfo.longitude,
-              }}
-              destination={{
-                latitude: getDestinationShop.coords.latitude,
-                longitude: getDestinationShop.coords.longitude,
-              }}
-              apikey={googleMapsAPIKey}
-              strokeWidth={3}
-              strokeColor="rgba(255, 45, 45, 1)"
-            />
-          )}
-          {spreadRadiusCoords?.longitude && (
-            <Circle
-              center={spreadRadiusCoords}
-              radius={1000 * spreadRadiusCircle}
-              strokeWidth={2}
-              strokeColor="#0000"
-              fillColor="rgba(0,0,0,0.15)"
-            />
-          )}
-          {myCurrentInfo?.latitude && (
-            <Marker
-              identifier="my_current_location_marker"
-              ref={marker => {
-                marker = marker;
-              }}
-              pinColor="transparent"
-              description={'This is a marker'}
-              opacity={0}
-              coordinate={{
-                latitude: myCurrentInfo?.latitude,
-                longitude: myCurrentInfo?.longitude,
-              }}></Marker>
-          )}
+        {/* {searchedLocation && (
+          <Marker
+            ref={marker => {
+              marker = marker;
+            }}
+            pinColor="#0000"
+            coordinate={{
+              latitude: searchedLocation.lat,
+              longitude: searchedLocation.lng,
+            }}></Marker>
+        )} */}
 
-          {/* {searchedLocation && (
-            <Marker
-              ref={marker => {
-                marker = marker;
-              }}
-              pinColor="#0000"
-              coordinate={{
-                latitude: searchedLocation.lat,
-                longitude: searchedLocation.lng,
-              }}></Marker>
-          )} */}
-
-          {/* {toShowDraggableMarker && draggableCoords.lat && (
-            <Marker
-              ref={marker => {
-                marker = marker;
-              }}
-              coordinate={{
-                latitude: draggableCoords.lat,
-                longitude: draggableCoords.lng,
-              }}
-              icon={require('../../assets/images/myLocationPaws.png')}
-              draggable
-              onDragEnd={e =>
-                setDraggableCoords(e.nativeEvent.coordinate)
-              }></Marker>
-          )} */}
-        </MapView>
-      </>
+        {toShowDraggableMarker && draggableCoords.latitude && (
+          <Marker
+            
+            coordinate={{
+              latitude: draggableCoords.latitude,
+              longitude: draggableCoords.longitude,
+            }}
+           ></Marker>
+        )}
+      </MapView>
+    </>
     );
   }),
 );
