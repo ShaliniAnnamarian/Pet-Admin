@@ -1,6 +1,7 @@
 import {
   Dimensions,
   Image,
+  Modal,
   Pressable,
   ScrollView,
   StyleSheet,
@@ -35,6 +36,7 @@ import { TimeClock } from '../../../assets/images/timeClock';
 import hoursConvertor from '../../../utils/hoursConvertor';
 import ToastModal from '../../comonComponent/toastModal';
 import LicenseVerifier from '../../comonComponent/licenseVerifier';
+import ReactPannellum, { getConfig } from "react-pannellum";
 // import LoaderCircle from '../../../utils/loaderActive';
 // import LicenseVerifier from '../../comonComponent/licenseVerifier';
 
@@ -349,9 +351,9 @@ export default function RegisterForm(props) {
     updateCurrForm(data);
   }
   function nextBtn() {
-    if(currentForm===2){
+    if (currentForm === 2) {
       let valid = true;
-  
+
       if (availablePetsArr.length === 0) {
         setValidationErrorPets('Please select at least one pet');
         valid = false;
@@ -360,15 +362,15 @@ export default function RegisterForm(props) {
         setValidationErrorProducts('Please select at least one service');
         valid = false;
       }
-  
+
       if (valid) {
         // Continue with submission logic
         handleSubmit(nextBtnClick)();
       }
-    }else{
+    } else {
       handleSubmit(nextBtnClick)();
     }
-   
+
   }
   function handleFormSubmit() {
     handleSubmit(onFormSubmit)();
@@ -481,8 +483,8 @@ export default function RegisterForm(props) {
   // set multi drop values
 
   function getCoordsFromMap(data) {
-    console.log("data11",data);
-    
+    console.log("data11", data);
+
     if (data?.latitude) {
       // setEditData(res);
       setValue('latitude', data.latitude.toString());
@@ -529,12 +531,12 @@ export default function RegisterForm(props) {
   // }, [FILE_UPLOAD_REDUCER]);
 
 
-  
+
 
   function setImages(data) {
-    console.log("camData",data);
+    console.log("camData", data);
     setPayLoadPetImages(data);
-    
+
     setIsLoaderActiveProps(true);
     loaderTextProps('Uploading...');
     setPetImagesArr([...petImagesArr, ...data]);
@@ -545,7 +547,7 @@ export default function RegisterForm(props) {
     const file = new FormData();
     file.append('file', res);
     file.append('file_type', 'image');
-   
+
     // dispatch(uploadFileFetch(file));
   }
 
@@ -580,6 +582,22 @@ export default function RegisterForm(props) {
     setAvailableProductsArr(item);
     if (item.length > 0) setValidationErrorProducts(''); // Clear error if selection is made
   };
+
+  const [imageUrl, setimageUrl] = useState("");
+  const [showPopup, setShowPopup] = useState(false);
+  const handle3DImage = (url) => {
+    console.log("url", url);
+
+    setShowPopup(!showPopup);
+    setimageUrl(url);
+  }
+  console.log("imageUrl", imageUrl);
+
+
+  // const handleClick = () => {
+  //   console.log(getConfig());
+  // };
+
 
   // ========================================
   return (currentFormMode &&
@@ -772,7 +790,6 @@ export default function RegisterForm(props) {
               />
             </React.Fragment>
           )}
-
           {(currentForm == 2 || currentFormMode == 'EDIT') && (
             <React.Fragment>
               <View style={[inpMain]}>
@@ -1047,8 +1064,8 @@ export default function RegisterForm(props) {
                   </TouchableOpacity>
 
                   {payLoadPetImages?.map((item, i) => {
-                     return ( 
-                      <View key={i}  style={[styles.addImagesMain]}>
+                    return (
+                      <TouchableOpacity onPress={() => handle3DImage(item?.uri)} key={i} style={[styles.addImagesMain]}>
                         <Image
                           height={'100%'}
                           width={'100%'}
@@ -1059,14 +1076,39 @@ export default function RegisterForm(props) {
                           style={styles.removeImg}>
                           <RemoveIconBg fillColor={'#C5C1C1'} color={'red'} />
                         </TouchableOpacity>
-                      </View>
+                      </TouchableOpacity>
 
-                      ); 
-                     })} 
+                    );
+                  })}
                 </View>
               </React.Fragment>
+
+
             </React.Fragment>
+
           )}
+          {/* Modal Popup */}
+
+          <Modal
+            animationType="slide" // Options: 'slide', 'fade', 'none'
+            transparent={true} // Makes the background transparent
+            visible={showPopup}
+            onRequestClose={() => setShowPopup(!showPopup)} // Android-specific close event
+          >
+            <View style={styles.modalContainer}>
+              <View style={styles.modalContent}>
+                <TouchableOpacity style={styles.modalText} onPress={() => setShowPopup(!showPopup)}><Text>Close!</Text></TouchableOpacity>
+                <Image
+                  height={'80%'}
+                  width={'100%'}
+                  source={{ uri:imageUrl }}
+                />
+                
+
+
+              </View>
+            </View>
+          </Modal>
           {(currentForm == 3 || currentFormMode == 'EDIT') && (
             <React.Fragment>
               <View style={{ paddingVertical: 10 }}>
@@ -1271,6 +1313,23 @@ const styles = StyleSheet.create({
     position: 'absolute',
     top: -10,
     right: -10,
+  },
+  modalContainer: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'rgba(0, 0, 0, 0.5)', // Semi-transparent background
+  },
+  modalContent: {
+    backgroundColor: 'white',
+    padding: 20,
+    borderRadius: 10,
+    width: "100%",
+    alignItems: 'center',
+  },
+  modalText: {
+    fontSize: 18,
+    marginBottom: 20,
   },
 });
 
