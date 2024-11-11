@@ -528,7 +528,13 @@ export default function RegisterForm(props) {
   //   }
   // }, [FILE_UPLOAD_REDUCER]);
 
+
+  
+
   function setImages(data) {
+    console.log("camData",data);
+    setPayLoadPetImages(data);
+    
     setIsLoaderActiveProps(true);
     loaderTextProps('Uploading...');
     setPetImagesArr([...petImagesArr, ...data]);
@@ -539,6 +545,7 @@ export default function RegisterForm(props) {
     const file = new FormData();
     file.append('file', res);
     file.append('file_type', 'image');
+   
     // dispatch(uploadFileFetch(file));
   }
 
@@ -547,7 +554,7 @@ export default function RegisterForm(props) {
     const res = petImagesArr.filter((item, index) => index !== i)
     setPetImagesArr(res);
     const resPayload = payLoadPetImages.filter((item, index) => index !== i)
-    setPayLoadPetImages(resPayload);
+    // setPayLoadPetImages(resPayload);
   }
 
   function removeDocument(i) {
@@ -608,7 +615,7 @@ export default function RegisterForm(props) {
                 control={control}
                 errMesg="This field is required"
                 defaultValue={editData?.owner_name ? editData?.owner_name : ''}
-                rules={{ required: true }}
+                rules={{ required: false }}
               />
               <Text style={[styles.seperatorText]}>Address</Text>
 
@@ -619,7 +626,7 @@ export default function RegisterForm(props) {
                 control={control}
                 errMesg="This field is required"
                 defaultValue={editData?.street ? editData?.street : ''}
-                rules={{ required: true }}
+                rules={{ required: false }}
               />
               <InpCtrl
                 label="Town"
@@ -628,7 +635,7 @@ export default function RegisterForm(props) {
                 control={control}
                 errMesg="This field is required"
                 defaultValue={editData?.town ? editData?.town : ''}
-                rules={{ required: true }}
+                rules={{ required: false }}
               />
 
               <View style={styles.singleRowInps}>
@@ -640,7 +647,7 @@ export default function RegisterForm(props) {
                     control={control}
                     errMesg="This field is required"
                     defaultValue={editData?.city ? editData?.city : ''}
-                    rules={{ required: true }}
+                    rules={{ required: false }}
                   />
                 </View>
                 <View style={{ flex: 1 }}>
@@ -650,7 +657,7 @@ export default function RegisterForm(props) {
                     controlName="pincode"
                     control={control}
                     errMesg="This field is required"
-                    rules={{ required: true, minLength: 6, maxLength: 6 }}
+                    rules={{ required: false, minLength: 6, maxLength: 6 }}
                     type="numeric"
                     defaultValue={editData?.pincode ? editData?.pincode : ''}
                   />
@@ -664,7 +671,7 @@ export default function RegisterForm(props) {
                 control={control}
                 errMesg="This field is required"
                 defaultValue={editData?.landmark ? editData?.landmark : ''}
-                rules={{ required: true }}
+                rules={{ required: false }}
               />
               <InpCtrl
                 label="Location in Google Map"
@@ -703,7 +710,7 @@ export default function RegisterForm(props) {
                     errMesg="This field is required"
                     type="numberic"
                     defaultValue={editData?.latitude ? editData?.latitude : ''}
-                    rules={{ required: true }}
+                    rules={{ required: false }}
                   />
                 </View>
                 <View style={[{ flex: 1 }]}>
@@ -718,7 +725,7 @@ export default function RegisterForm(props) {
                       editData?.longitude ? editData?.longitude : ''
                     }
                     cusValue={editData?.longitude ? editData?.longitude : ''}
-                    rules={{ required: true }}
+                    rules={{ required: false }}
                   />
                 </View>
               </View>
@@ -733,7 +740,7 @@ export default function RegisterForm(props) {
                 errMesg="This field is required"
                 type="numeric"
                 defaultValue={editData?.mobile ? editData?.mobile : ''}
-                rules={{ pattern: /^\d{10}$/, required: true }}
+                rules={{ pattern: /^\d{10}$/, required: false }}
               />
               <InpCtrl
                 label="Landline Number"
@@ -747,7 +754,7 @@ export default function RegisterForm(props) {
               <InpCtrl
                 label="Email"
                 placeholderText="Enter email"
-                rules={{ pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, required: true }}
+                rules={{ pattern: /^[\w-\.]+@([\w-]+\.)+[\w-]{2,4}$/, required: false }}
                 controlName="email"
                 control={control}
                 errMesg="This field is required"
@@ -1040,12 +1047,12 @@ export default function RegisterForm(props) {
                   </TouchableOpacity>
 
                   {payLoadPetImages?.map((item, i) => {
-                    return (
-                      <View key={item?.uuid} style={[styles.addImagesMain]}>
+                     return ( 
+                      <View key={i}  style={[styles.addImagesMain]}>
                         <Image
                           height={'100%'}
                           width={'100%'}
-                          source={{ uri: item?.file_url }}
+                          source={{ uri: item?.uri }}
                         />
                         <TouchableOpacity
                           onPress={() => removeImg(i)}
@@ -1053,8 +1060,9 @@ export default function RegisterForm(props) {
                           <RemoveIconBg fillColor={'#C5C1C1'} color={'red'} />
                         </TouchableOpacity>
                       </View>
-                    );
-                  })}
+
+                      ); 
+                     })} 
                 </View>
               </React.Fragment>
             </React.Fragment>
@@ -1265,3 +1273,5 @@ const styles = StyleSheet.create({
     right: -10,
   },
 });
+
+

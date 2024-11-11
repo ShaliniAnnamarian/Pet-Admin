@@ -18,7 +18,7 @@ export default function Layout() {
             {/* <Text>test</Text> */}
             <StatusBar backgroundColor={'#ffff'} barStyle={"dark-content"} />
             <NavigationContainer>
-                <Stack.Navigator initialRouteName="login">
+                <Stack.Navigator initialRouteName="storeList">
                     <Stack.Group screenOptions={{ animation: 'slide_from_left' }}>
                         <Stack.Screen name="login" component={Login} options={{ headerShown: false, unmountOnBlur: true }} />
                     </Stack.Group>

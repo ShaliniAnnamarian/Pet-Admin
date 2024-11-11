@@ -4,12 +4,14 @@ import { pick, pickDirectory } from 'react-native-document-picker';
 import { useDispatch } from 'react-redux';
 // import { uploadFileFetch } from '../../service/asyncUpdates/uploadFile';
 import { useState } from 'react';
-import { defaultColor,
+import {
+  defaultColor,
   f12,
   f14,
   flexCenter,
   primaryFontMedium,
-  shadowStyle,} from '../../styles/appStyles';
+  shadowStyle,
+} from '../../styles/appStyles';
 import DocumentIcon from '../../assets/images/documentIcon';
 import DocumentVerifyIcon from '../../assets/images/documentVerifyIcon';
 import DocumentUploadIcon from '../../assets/images/documentUplod';
@@ -20,21 +22,21 @@ export default LicenseVerfier = props => {
   const { docItem, fileRes, currType, removeItem } = props;
   const dispatch = useDispatch();
   const [progressStep, setProgressStep] = useState(0);
+  const [testFile, settestFile] = useState("");
 
   const docPickerClicked = async () => {
-    
-
-  try {
-    const data = await pick({});
-    if (data && data[0]) {
-      fileUploadAPI(data[0]);
+    try {
+      const data = await pick({});
+      if (data && data[0]) {
+        fileUploadAPI(data[0]);
+      }
+    } catch (err) {
+      console.error("File pick error:", err);
     }
-  } catch (err) {
-    console.error("File pick error:", err);
-  }
   };
 
   function fileUploadAPI(res) {
+    console.log('file', res);
     setProgressStep(40)
     const file = new FormData();
     const { name, type, uri } = res;
@@ -47,6 +49,9 @@ export default LicenseVerfier = props => {
 
     file.append('file', payLoad);
     file.append('file_type', docItem.label);
+   
+    console.log('payLoad', payLoad);
+    settestFile(payLoad);
     // // dispatch(uploadFileFetch(file));
     setProgressStep(100)
   }
@@ -61,7 +66,8 @@ export default LicenseVerfier = props => {
             <Text style={[styleDoc.leftTextHeader]}>{docItem.label}</Text>
           </View>
           {
-            docItem?.file_name ?
+            // docItem?.file_name ?
+            testFile?.name?
               <TouchableOpacity style={[styleDoc.rightHeader]}>
                 <Text style={[styleDoc.rightTextheader]}>Verified</Text>
                 <DocumentVerifyIcon />
@@ -73,7 +79,8 @@ export default LicenseVerfier = props => {
       }>
       <View style={{}}>
         {
-          !docItem?.file_name &&
+          // !docItem?.file_name &&
+          !testFile?.name &&
           <TouchableOpacity
             style={[styleDoc.importFile]}
             onPress={() => docPickerClicked()}>
@@ -82,10 +89,12 @@ export default LicenseVerfier = props => {
           </TouchableOpacity>
         }
         {
-          docItem?.file_name &&
+          // docItem?.file_name &&
+          testFile?.name &&
           <View style={[styleDoc.fileaddedMain]}>
             <View style={[styleDoc.fileName]}>
-              <Text style={[styleDoc.fileNameText]}>{docItem?.file_name}{progressStep}</Text>
+              <Text style={[styleDoc.fileNameText]}>{testFile?.name}{progressStep}</Text>
+              {/* <Text style={[styleDoc.fileNameText]}>{docItem?.file_name}{progressStep}</Text> */}
               {
 
                 <TouchableOpacity onPress={() => removeItem()}>
@@ -124,7 +133,7 @@ const styleDoc = StyleSheet.create({
     fontFamily: primaryFontMedium,
     fontSize: f14,
     color: '#07A4DE',
-    marginLeft:10,
+    marginLeft: 10,
   },
   rightHeader: {
     ...flexCenter,
@@ -153,6 +162,6 @@ const styleDoc = StyleSheet.create({
     justifyContent: 'space-between',
   },
   fileNameText: {
-    color : defaultColor
+    color: defaultColor
   },
 });
