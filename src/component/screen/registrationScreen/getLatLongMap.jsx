@@ -41,7 +41,6 @@ export default function GetCoordsMapView(props) {
     
     Geolocation.getCurrentPosition(
       (position) => {
-        console.log("position",position);
         const { latitude, longitude } = position.coords;
         setCurrentPosition({ latitude, longitude });
         updateInitialShops(latitude, longitude);
@@ -64,7 +63,6 @@ export default function GetCoordsMapView(props) {
 };
 
 function updateInitialShops(lat, lng) {
-  console.log("latitude",lat,lng)
   // const selectedRadius = { max: radius };
   const defLatDelta = 50;
   const resLatDel = 5 / defLatDelta;

@@ -36,7 +36,7 @@ import { TimeClock } from '../../../assets/images/timeClock';
 import hoursConvertor from '../../../utils/hoursConvertor';
 import ToastModal from '../../comonComponent/toastModal';
 import LicenseVerifier from '../../comonComponent/licenseVerifier';
-import ReactPannellum, { getConfig } from "react-pannellum";
+// import { PanoramaView } from '@thomas_hunt/react-native-panorama-view';
 // import LoaderCircle from '../../../utils/loaderActive';
 // import LicenseVerifier from '../../comonComponent/licenseVerifier';
 
@@ -483,7 +483,6 @@ export default function RegisterForm(props) {
   // set multi drop values
 
   function getCoordsFromMap(data) {
-    console.log("data11", data);
 
     if (data?.latitude) {
       // setEditData(res);
@@ -534,7 +533,6 @@ export default function RegisterForm(props) {
 
 
   function setImages(data) {
-    console.log("camData", data);
     setPayLoadPetImages(data);
 
     setIsLoaderActiveProps(true);
@@ -586,16 +584,12 @@ export default function RegisterForm(props) {
   const [imageUrl, setimageUrl] = useState("");
   const [showPopup, setShowPopup] = useState(false);
   const handle3DImage = (url) => {
-    console.log("url", url);
 
     setShowPopup(!showPopup);
     setimageUrl(url);
   }
-  console.log("imageUrl", imageUrl);
-
 
   // const handleClick = () => {
-  //   console.log(getConfig());
   // };
 
 
@@ -1098,13 +1092,18 @@ export default function RegisterForm(props) {
             <View style={styles.modalContainer}>
               <View style={styles.modalContent}>
                 <TouchableOpacity style={styles.modalText} onPress={() => setShowPopup(!showPopup)}><Text>Close!</Text></TouchableOpacity>
-                <Image
+                {/* <Image
                   height={'80%'}
                   width={'100%'}
                   source={{ uri:imageUrl }}
-                />
+                /> */}
                 
-
+                {/* <PanoramaView
+      style={styles.viewer}
+      dimensions={{ height: 230, width: Dimensions.get("window").width }}
+      inputType="mono"
+      imageUrl="https://raw.githubusercontent.com/googlevr/gvr-android-sdk/master/assets/panoramas/testRoom1_2kMono.jpg"
+    /> */}
 
               </View>
             </View>
@@ -1331,6 +1330,9 @@ const styles = StyleSheet.create({
     fontSize: 18,
     marginBottom: 20,
   },
+  viewer: {
+    height: 230
+  }
 });
 
 

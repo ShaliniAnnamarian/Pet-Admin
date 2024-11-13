@@ -130,7 +130,6 @@ export default MapContainer = React.memo(
 
       [shops, carouselItem],
     );
-    console.log("myCurrentInfo",draggableCoords);
     
     function mapLoadComplete() {
       setLoaderActive(false);

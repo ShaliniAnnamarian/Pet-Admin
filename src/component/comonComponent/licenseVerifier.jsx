@@ -36,7 +36,6 @@ export default LicenseVerfier = props => {
   };
 
   function fileUploadAPI(res) {
-    console.log('file', res);
     setProgressStep(40)
     const file = new FormData();
     const { name, type, uri } = res;
@@ -50,7 +49,6 @@ export default LicenseVerfier = props => {
     file.append('file', payLoad);
     file.append('file_type', docItem.label);
    
-    console.log('payLoad', payLoad);
     settestFile(payLoad);
     // // dispatch(uploadFileFetch(file));
     setProgressStep(100)
